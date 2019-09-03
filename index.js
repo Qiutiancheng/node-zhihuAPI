@@ -34,6 +34,6 @@ usersRouter.get('/:id',auth,(ctx)=>{
 // 任何中间件都需要使用use注册到app里
 app.use(router.routes())
 app.use(usersRouter.routes())
-// 返回允许的http方法；如果请求方法符合koa-router所支持的方法但是路由目前不存在此方法，会自动提示405
+// 返回允许的http方法如果请求方法符合koa-router所支持的方法但是路由目前不存在此方法，会自动提示405
 app.use(usersRouter.allowedMethods())
-app.listen(8080)
+app.listen(3000)
