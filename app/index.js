@@ -1,13 +1,20 @@
 const Koa = require('koa')
 // Koa无法解析请求体，需要此中间件才能解析
 const bodyparser = require('koa-bodyparser') 
-// 使用第三方错误处理中间件
+// 第三方错误处理中间件
 const error = require('koa-json-error')
+// 第三方校验中间件
 const parameter = require('koa-parameter')
-const app = new Koa()  
+// 链接mongoDB
+const mongoose = require('mongoose')
+const {connectionStr} = require('./config')
 const routing = require('./routes')
+const app = new Koa()  
+
 const port = 3000
- 
+// 链接mongoDB
+ mongoose.connect(connectionStr,{ useNewUrlParser: true },()=>console.log('mongoDB 链接成功!'))
+ mongoose.connection.on('error',console.error)
 
 app.use(error({
     // 生产环境才现实错误的堆栈信息

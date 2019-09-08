@@ -1,50 +1,44 @@
-// 临时的内存数据库
-const db = [{name:'李雷'}]
+const User = require('../models/users')
 
 class UserCtl {
-    getList(ctx){
-        a.b
-        ctx.body = db
+    async getList(ctx){ 
+        ctx.body = await User.find()
     }
-    getUser(ctx){
-        if(ctx.params.id * 1 >= db.length){
-            ctx.throw(412)
+    async getUser(ctx){ 
+        const user = await User.findById(ctx.params.id)
+        if(!user) {
+            ctx.throw(404)
         }
-        ctx.body = db[ctx.params.id*1]
+        ctx.body = user
     }
-    create(ctx){
+    async create(ctx){
         ctx.verifyParams({
             name: {
                 type: 'string',
                 required: true
-            },
-            age: {
-                type: 'number',
-                required: false
             }
         })
-        db.push(ctx.request.body)
-        ctx.body = ctx.request.body
+        const user = await new User(ctx.request.body).save()
+        ctx.body = user
     }
-    update(ctx){
+    async update(ctx){
         ctx.verifyParams({
             name: {
                 type: 'string',
                 required: true
-            },
-            age: {
-                type: 'number',
-                required: false
             }
         })
-        db[ctx.params.id*1] = ctx.request.body
-        ctx.body = 204
-    }
-    delete(ctx){
-        if(ctx.params.id * 1 >= db.length){
-            ctx.throw(412)
+        const user = await User.findByIdAndUpdate(ctx.params.id,ctx.request.body)
+        if(!user){
+            ctx.throw(404)
         }
-        db.splice(ctx.params.id*1,1)
+        ctx.body = user
+    }
+    async delete(ctx){
+        const user = await User.findByIdAndDelete(ctx.params.id)
+        if(!user){
+            ctx.throw(404)
+        }
         ctx.body = 204
     }
 }
