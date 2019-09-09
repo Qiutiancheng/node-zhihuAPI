@@ -30,7 +30,7 @@ class UserCtl {
             ctx.throw(409,'用户已存在')
         }
         const user = await new User(ctx.request.body).save()
-        ctx.body = user
+        ctx.body = 204
     }
     async update(ctx){
         ctx.verifyParams({
@@ -75,6 +75,13 @@ class UserCtl {
         // 生成Token，过期时间为1天
         const token = jsonwebtoken.sign({_id,name},secret,{expiresIn: '1d'})
         ctx.body = {token}
+    }
+    // 用户授权，只能对自己的信息进行更新和删除
+    async checkOwner(ctx, next){
+        if(ctx.params.id !== ctx.state.user._id){
+            ctx.throw(403, '没有权限')
+        }
+        await next()
     }
 }
 
