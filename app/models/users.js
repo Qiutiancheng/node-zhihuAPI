@@ -41,10 +41,12 @@ const userSchema = new Schema({
         select: false 
     },
     employments: {
-        type:[{
-            company:{type:String},
-            job:{type:String}
-        }],
+        type:[
+            {
+                company:{type:String},
+                job:{type:String}
+            }
+    ],
         select: false 
     },
     educations: {
@@ -58,6 +60,16 @@ const userSchema = new Schema({
             }
         ],
         select: false 
+    },
+    following: {
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                // 引用
+                ref: 'User'
+            }
+        ],
+        select: false
     }
 })
 

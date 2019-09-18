@@ -8,7 +8,12 @@ const {
         update,
         delete:del,
         login,
-        checkOwner
+        checkOwner,
+        checkUserIsExist,
+        listFollowing,
+        listFollowers,
+        follow,
+        unFollow
     } = require('../controllers/users')
 // 密钥
 const { secret } = require('../config')
@@ -27,5 +32,13 @@ router.patch('/:id', auth, checkOwner, update)
 router.delete('/:id', auth, checkOwner, del)
 // 登录
 router.post('/login', login)
+// 我关注的
+router.get('/:id/following', listFollowing)
+// 关注我的
+router.get('/:id/followers', listFollowers)
+// 关注某人
+router.put('/following/:id', auth, checkUserIsExist, follow) 
+// 取消关注
+router.delete('/following/:id', auth, checkUserIsExist, unFollow)
 
 module.exports = router
